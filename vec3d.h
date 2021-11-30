@@ -27,6 +27,11 @@ class Vec3d {
             return Vec3d(helper::random_double(min,max), helper::random_double(min,max), helper::random_double(min,max));
         }
 
+        inline void print()
+        {
+            std::cout << "Vec3d: (" << e[0] << ", " << e[1] << ", " << e[2] << ")" << std::endl;
+        }
+
         bool near_zero() const 
         {
             const auto s = 1e-8;

@@ -40,7 +40,7 @@ public:
     std::vector<std::shared_ptr<Hittable>> objects;
 
     HittableList() = default;
-    HittableList(std::shared_ptr<Hittable> object)
+    explicit HittableList(std::shared_ptr<Hittable> object)
     {add(object);}
 
     void clear()
@@ -211,7 +211,9 @@ public:
         auto objects = src_objects; // Create a modifiable array of the source scene objects
 
         int axis = helper::random_int(0,2);
-        auto comparator = (axis == 0) ? box_x_compare : (axis == 1) ? box_y_compare : box_z_compare;
+        auto comparator = (axis == 0) ? box_x_compare
+                        : (axis == 1) ? box_y_compare
+                                      : box_z_compare;
 
         size_t object_span = end - start;
 
@@ -243,7 +245,7 @@ public:
 
         AABB box_left, box_right;
 
-        if (!left->bounding_box (time0, time1, box_left) || !right->bounding_box(time0, time1, box_right))
+        if (!left->bounding_box(time0, time1, box_left) || !right->bounding_box(time0, time1, box_right))
             std::cerr << "No bounding box in BVHNode constructor.\n";
 
         box = surrounding_box(box_left, box_right);       
@@ -433,6 +435,49 @@ public:
     {
         out_box = AABB(box_min, box_max);
         return true;
+    }
+};
+
+
+class Translate : public Hittable {
+public:
+    std::shared_ptr<Hittable> ptr;
+    Vec3d offset;
+public:
+    Translate(std::shared_ptr<Hittable> p, const Vec3d& displacement) : ptr(p), offset(displacement) {}
+    virtual bool hit(const Ray& r, double t_min, double t_max, HitRecord& rec) const override
+    {
+        Ray moved_r(r.origin() - offset, r.direction());
+        if (!ptr->hit(moved_r, t_min, t_max, rec)) return false;
+
+        rec.p += offset;
+        rec.set_face_normal(moved_r, rec.normal);
+        
+        return true;
+    }
+    virtual bool bounding_box(double time0, double time1, AABB& out_box) const override 
+    {
+        if(!ptr->bounding_box(time0, time1, out_box)) return false;
+        out_box = AABB(out_box.min() + offset, out_box.max() + offset);
+        return true;
+    }
+};
+
+class FlipFace : public Hittable {
+public:
+    std::shared_ptr<Hittable> ptr;
+public:
+    FlipFace(std::shared_ptr<Hittable> p) : ptr(p) {}
+    virtual bool hit(const Ray& r, double t_min, double t_max, HitRecord& rec) const override
+    {
+        if (!ptr->hit(r, t_min, t_max, rec)) return false;
+
+        rec.front_face = !rec.front_face;
+        return true;
+    }
+    virtual bool bounding_box(double time0, double time1, AABB& out_box) const override 
+    {
+        return ptr->bounding_box(time0, time1, out_box);
     }
 };
 
