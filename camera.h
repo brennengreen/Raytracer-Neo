@@ -4,6 +4,7 @@
 #include "helper.h"
 #include "ray.h"
 #include "vec3d.h"
+#include "sceneconfig.h"
 
 class Camera {
 public:
@@ -23,6 +24,20 @@ public:
         auto w = unit_vector(lookfrom - lookat); auto u = unit_vector(cross(up, w)); auto v = cross(w,u);
 
         mOrigin = lookfrom;
+        mHorizontal = vp_width * u;
+        mVertical = vp_height * v;
+        mLowerLeftCorner = mOrigin - mHorizontal/2 - mVertical/2 - w;
+    }
+    
+    explicit Camera(const SceneConfig& config) {
+        double theta = helper::radians(config.fov);
+        double h = std::tan(theta/2);
+        double vp_height = 2.0 * h;
+        double vp_width = config.aspect_ratio * vp_height;
+
+        auto w = unit_vector(config.lookfrom - config.lookat); auto u = unit_vector(cross(config.up, w)); auto v = cross(w,u);
+
+        mOrigin = config.lookfrom;
         mHorizontal = vp_width * u;
         mVertical = vp_height * v;
         mLowerLeftCorner = mOrigin - mHorizontal/2 - mVertical/2 - w;
