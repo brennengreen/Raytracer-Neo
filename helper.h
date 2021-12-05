@@ -3,6 +3,10 @@
 
 #include <random>
 
+/**
+ * Helper namespace, provides a collection of useful maths for the
+ * raytracer.
+ */
 namespace helper {
     double PI = 3.14159256;
     inline double random_double() 

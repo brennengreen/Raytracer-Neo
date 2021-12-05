@@ -6,6 +6,11 @@
 #include "vec3d.h"
 #include "sceneconfig.h"
 
+/**
+ * Camera class
+ *  This class serves an obvious purpose, it is used to define
+ *  the point of view from when the renderer draws at.
+ */
 class Camera {
 public:
     Camera(

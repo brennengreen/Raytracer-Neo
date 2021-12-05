@@ -4,6 +4,8 @@
 #include "helper.h"
 #include "vec3d.h"
 
+// Texture classes
+// Provide the ability to map materials to a texture
 class Texture 
 {
 public:

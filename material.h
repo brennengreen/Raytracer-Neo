@@ -9,6 +9,16 @@
 
 struct HitRecord;
 
+/**
+ * The material classes which implement their own way of scattering light
+ * Support Materials:
+ *  - Lambertian
+ *  - Metal
+ *  - Dielectrics
+ *  - DiffuseLight (emitter)
+ * 
+ */
+
 class Material
 {
 public:

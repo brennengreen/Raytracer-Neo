@@ -1,5 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
+// SceneConfig struct used to pass information
+// to the Camera object
 struct SceneConfig  {
     double aspect_ratio;
     int width;

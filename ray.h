@@ -3,6 +3,7 @@
 
 #include "vec3d.h"
 
+// Ray class, obvious purposes.
 class Ray 
 {
     public:

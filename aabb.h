@@ -4,6 +4,14 @@
 #include "helper.h"
 #include "vec3d.h"
 
+
+/**
+ * AABB Class
+ * An AABB is used for two purposes in this project:
+ * 1. Building the bounding volume hierarchy which helps to speed
+ *  up the raytracing process
+ * 2. Defining axis aligned hittables such as cubes.
+ */
 class AABB
 {
 public:

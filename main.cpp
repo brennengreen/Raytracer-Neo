@@ -1,3 +1,23 @@
+/**
+ *  CS535 Project 3 - Raytracer
+ *  Author: Brennen Green
+ *  This program will raytrace a scene defined by a collection of Hittables and Materials.
+ *  
+ *  There are multiple scenes set up to be rendered, to select a scene to be rendered
+ *  passs in either 0 (default) or 1 (the project scene) as a command line argument
+ *  Example Usage: ./raytrace 1 (renders the project scene)
+ * 
+ *  To improve the "noise" or "shadow acne" in the scene, you can choose to increase
+ *  the NUM_SAMPLES macro defined below, more samplesw will require more rendering time.
+ *  
+ *  Building Instructions:
+ *  There is a Makefile provided to build the program for you.
+ *  Requirements: C++ 17
+ * 
+ **/
+
+#define NUM_SAMPLES 150
+
 #include <iostream>
 #include <cmath>
 #include <limits>
@@ -21,6 +41,10 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
+/**
+ * ray_color()
+ * Determines the ray_color at the end of the recursive sequence, or scatters if not there yet
+ */
 Color3d ray_color(const Ray& r, const Color3d& bg, const Hittable& world, int depth)
 {
     HitRecord rec;
@@ -43,9 +67,6 @@ Color3d ray_color(const Ray& r, const Color3d& bg, const Hittable& world, int de
         return emitted;
     }
     
-    //auto transform_normal = (rec.normal*0.5) + Vec3d(0.5,0.5,0.5);
-    //transform_normal.print();
-    //return transform_normal;
     return emitted + attenuation * ray_color(scattered, bg, world, depth-1);
 }
 
@@ -199,6 +220,10 @@ HittableList proj3_scene()
     return objects;
 }
 
+/**
+ * get_scene() given a scene_id and a SceneConfig, configures the camera
+ *  and returns the proper scenegraph
+ */
 HittableList get_scene(int scene_id, SceneConfig &config)
 {
     switch(scene_id){
@@ -206,7 +231,7 @@ HittableList get_scene(int scene_id, SceneConfig &config)
         config.aspect_ratio = 1.0;
         config.width = 600;
         config.height = static_cast<int>(config.width / config.aspect_ratio);
-        config.spp = 3000;
+        config.spp = NUM_SAMPLES;
         config.max_depth = 50;
         config.lookfrom = Point3d(-600, 578, -500);
         config.lookat = Point3d(555, 000, 555);
@@ -219,7 +244,7 @@ HittableList get_scene(int scene_id, SceneConfig &config)
         config.aspect_ratio = 1.0;
         config.width = 600;
         config.height = static_cast<int>(config.width / config.aspect_ratio);
-        config.spp = 50;
+        config.spp = NUM_SAMPLES;
         config.max_depth = 50;
         config.lookfrom = Point3d(278, 278, -800);
         config.lookat = Point3d(278, 278, 0);

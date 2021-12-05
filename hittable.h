@@ -13,6 +13,11 @@
 class Material;
 
 
+/**
+ * HitRecord struct
+ *  A HitRecord proves the raytracer with useful information
+ *  such as uv transformations, the material, and the normal of intersection
+ */
 struct HitRecord {
     Point3d p;
     Vec3d normal;
@@ -28,12 +33,22 @@ struct HitRecord {
     }
 };
 
+/**
+ * Hittable class
+ *  A virtual class which all hittables derive from
+ *  provides a hit() and bounding_box() function to determine intersections
+ */
 class Hittable {
 public:
     virtual bool hit (const Ray& r, double t_min, double t_max, HitRecord& rec) const = 0;
     virtual bool bounding_box(double time0, double time1, AABB& out_box) const = 0;  
 };
 
+/**
+ * HittableList class
+ *  A scenegraph implementation of a hittable,
+ *  provides the ability to group several hittables into one instance
+ */
 class HittableList : public Hittable
 {
 public:
@@ -197,6 +212,10 @@ bool box_x_compare (const std::shared_ptr<Hittable> a, const std::shared_ptr<Hit
 bool box_y_compare (const std::shared_ptr<Hittable> a, const std::shared_ptr<Hittable> b);
 bool box_z_compare (const std::shared_ptr<Hittable> a, const std::shared_ptr<Hittable> b);
 
+/**
+ * BVHNode class
+ *  Provides a node which can be used to define the bounding volume hierarchy
+ */
 class BVHNode : public Hittable
 {
 public:
@@ -292,6 +311,8 @@ bool box_y_compare (const std::shared_ptr<Hittable> a, const std::shared_ptr<Hit
 bool box_z_compare (const std::shared_ptr<Hittable> a, const std::shared_ptr<Hittable> b) {
     return box_compare(a, b, 2);
 }
+
+// Axis Aligned Classes
 
 class XYRect : public Hittable {
     public:
@@ -438,6 +459,8 @@ public:
     }
 };
 
+
+// Transformation Classes
 
 class Translate : public Hittable {
 public:

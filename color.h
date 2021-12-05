@@ -4,7 +4,10 @@
 #include "vec3d.h"
 #include "helper.h"
 
-
+/**
+ * write_color, a helper too write the color into the image buffer
+ * 
+ */
 void write_color(uint8_t* buffer, Color3d pixel_color, int &index, int spp) 
 {
     double r = pixel_color.x(); double g = pixel_color.y(); double b = pixel_color.z();

@@ -6,6 +6,12 @@
 
 #include "helper.h"
 
+
+/**
+ * Vec3d Class
+ *  A vector class which is the foundation of the entire raytracer
+ *  provides the logic for all vector math.
+ */
 class Vec3d {
     public:
         double e[3];
